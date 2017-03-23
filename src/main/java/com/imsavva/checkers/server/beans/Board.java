@@ -10,12 +10,13 @@ import java.util.Map;
  */
 public class Board {
 
+    public static final char[] CHARACTERS = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H' };
+
     private static final int DEFAULT_WIDTH = 8;
     private static final int DEFAULT_HEIGHT = 8;
     private Map<Point, Cell> cells;
     private int width;
     private int height;
-    private static final char[] characters = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H' };
 
     public Board() {
         this(DEFAULT_WIDTH, DEFAULT_HEIGHT);
@@ -74,7 +75,7 @@ public class Board {
     private void createCells() {
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
-                String name = characters[j] + String.valueOf(i + 1);
+                String name = CHARACTERS[j] + String.valueOf(i + 1);
                 Cell cell = new Cell(name, j, i);
                 Point point = new Point (i, j);
                 this.cells.put(point, cell);
