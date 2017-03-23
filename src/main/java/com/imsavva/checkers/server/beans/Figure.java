@@ -1,6 +1,8 @@
 package com.imsavva.checkers.server.beans;
 
 /**
+ * Figure class represents player's units on a game board.
+ *
  * @author Savva Kodeikin
  */
 public class Figure {
@@ -25,6 +27,9 @@ public class Figure {
         return color;
     }
 
+    /**
+     * Figure can be of different colors.
+     */
     public enum Color {
         BLACK,
         WHITE

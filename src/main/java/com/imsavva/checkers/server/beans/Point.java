@@ -1,6 +1,8 @@
 package com.imsavva.checkers.server.beans;
 
 /**
+ * Point class represents coordinates of a cell at the board.
+ *
  * @author Savva Kodeikin
  */
 public class Point {

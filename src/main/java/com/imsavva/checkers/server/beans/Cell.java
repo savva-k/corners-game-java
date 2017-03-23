@@ -1,6 +1,8 @@
 package com.imsavva.checkers.server.beans;
 
 /**
+ * Cell class represents a cell on a game board.
+ *
  * @author Savva Kodeikin
  */
 public class Cell {
@@ -22,6 +24,9 @@ public class Cell {
         this(name, new Point(x, y));
     }
 
+    /**
+     * Remove a figure from the cell.
+     */
     public void removeFigure() {
         setFigure(null);
     }
@@ -48,12 +53,17 @@ public class Cell {
         this.point.setY(y);
     }
 
+    /**
+     * Check if the cell contain a figure or not.
+     *
+     * @return boolean result
+     */
+    public boolean isEmpty() {
+        return this.figure == null;
+    }
+
     @Override
     public String toString() {
         return String.format("Cell [%s, %s]", name, point);
-    }
-
-    public boolean isEmpty() {
-        return this.figure == null;
     }
 }

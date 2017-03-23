@@ -28,6 +28,12 @@ public class Board {
         createCells();
     }
 
+    /**
+     * Add a figure to the board at the specified point.
+     *
+     * @param figure Figure to add
+     * @param point Point to add the figure to
+     */
     public void addFigure(Figure figure, Point point) {
         this.cells.get(point).setFigure(figure);
     }
@@ -38,6 +44,13 @@ public class Board {
         }
     }
 
+    /**
+     * Get a cell of the board placed at specified coordinates.
+     *
+     * @param x X coordinate
+     * @param y Y coordinate
+     * @return Cell at specified coordinates
+     */
     public Cell getCellAt(int x, int y) {
         return this.cells.get(new Point(x, y));
     }
