@@ -9,14 +9,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Ugolki is a two-players game, usually played on a 8x8 board.
+ *
+ * @see <a href="https://en.wikipedia.org/wiki/Ugolki">https://en.wikipedia.org/wiki/Ugolki</a>
  * @author Savva Kodeikin
  */
-public class CheckersGame {
+public class UgolkiGame {
 
     private Board board;
     private InterfaceDrawer interfaceDrawer;
 
-    public CheckersGame(Board board, InterfaceDrawer drawer) {
+    public UgolkiGame(Board board, InterfaceDrawer drawer) {
         this.board = board;
         this.interfaceDrawer = drawer;
 
@@ -25,6 +28,9 @@ public class CheckersGame {
         initBlackFigures();
     }
 
+    /**
+     * Start a new game.
+     */
     public void play() {
         interfaceDrawer.draw();
     }
@@ -41,6 +47,9 @@ public class CheckersGame {
         }
     }
 
+    /**
+     * This class contains parameters for ugolki game.
+     */
     private static class CheckersParams {
         private static List<Point> whitesStartPoints = new ArrayList<Point>();
         private static List<Point> blacksStartPoints = new ArrayList<Point>();
