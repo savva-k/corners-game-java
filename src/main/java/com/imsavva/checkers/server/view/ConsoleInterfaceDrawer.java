@@ -19,12 +19,20 @@ public class ConsoleInterfaceDrawer implements InterfaceDrawer {
         System.out.println("drawing a board");
 
         for (int y = 0; y < board.getHeight(); y++) {
+            System.out.print(board.getHeight() - y);
+
             for (int x = board.getWidth() - 1; x >= 0; x--) {
                 Cell cell = board.getCellAt(x, y);
                 drawCell(cell);
             }
 
             System.out.println();
+        }
+
+        System.out.print(" ");
+
+        for (int i = 0; i < board.getWidth(); i++) {
+            System.out.print(" " + board.CHARACTERS[i] + " ");
         }
     }
 
