@@ -56,6 +56,34 @@ public class Board {
         return this.cells.get(new Point(x, y));
     }
 
+    /**
+     * Get cell by a text address, like A1, H8.
+     *
+     * @param address String address
+     * @throws IllegalArgumentException
+     * @return Cell cell
+     */
+    public Cell getCellAt(String address) {
+        if (address.length() != 2) {
+            throw new IllegalArgumentException("Incorrect argument \"address\" length: " + address);
+        }
+
+        char xAxisChar = address.toUpperCase().charAt(0);
+
+        for (int x = 0; x < CHARACTERS.length; x++) {
+            if (xAxisChar == CHARACTERS[x]) {
+                try {
+                    int y = Integer.valueOf(address.substring(1));
+                    return getCellAt(x, y);
+                } catch (NumberFormatException e) {
+                    throw new IllegalArgumentException("Incorrect argument \"address\": " + address);
+                }
+            }
+        }
+
+        throw new IllegalArgumentException("Incorrect argument \"address\" value: " + address);
+    }
+
     public int getWidth() {
         return width;
     }

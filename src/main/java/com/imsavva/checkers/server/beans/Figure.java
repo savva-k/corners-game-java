@@ -27,6 +27,11 @@ public class Figure {
         return color;
     }
 
+    @Override
+    public String toString() {
+        return color.toString() + " figure";
+    }
+
     /**
      * Figure can be of different colors.
      */

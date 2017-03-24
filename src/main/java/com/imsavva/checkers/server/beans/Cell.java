@@ -64,6 +64,6 @@ public class Cell {
 
     @Override
     public String toString() {
-        return String.format("Cell [%s, %s]", name, point);
+        return String.format("Cell [%s, %s, %s]", name, point, figure);
     }
 }

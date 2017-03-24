@@ -1,8 +1,8 @@
 package com.imsavva.checkers.server.model;
 
-import com.imsavva.checkers.server.beans.Board;
-import com.imsavva.checkers.server.beans.Figure;
-import com.imsavva.checkers.server.beans.Point;
+import com.imsavva.checkers.server.beans.*;
+import com.imsavva.checkers.server.model.commands.Command;
+import com.imsavva.checkers.server.model.exceptions.GameException;
 import com.imsavva.checkers.server.view.InterfaceDrawer;
 
 import java.util.ArrayList;
@@ -14,25 +14,54 @@ import java.util.List;
  * @see <a href="https://en.wikipedia.org/wiki/Ugolki">https://en.wikipedia.org/wiki/Ugolki</a>
  * @author Savva Kodeikin
  */
-public class UgolkiGame {
+public class UgolkiGame implements GameModel {
 
     private Board board;
-    private InterfaceDrawer interfaceDrawer;
+    private Player player1;
+    private Player player2;
+    private WinCheckResponse lastGameStatus;
+    private boolean gameFinished;
 
-    public UgolkiGame(Board board, InterfaceDrawer drawer) {
+    public UgolkiGame(Board board, Player player1, Player player2) {
         this.board = board;
-        this.interfaceDrawer = drawer;
+        this.player1 = player1;
+        this.player2 = player2;
+        this.gameFinished = false;
+    }
 
+    public void startGame() {
         board.cleanCells();
         initWhiteFigures();
         initBlackFigures();
+        lastGameStatus = new WinCheckResponse(WinCheckResponse.Status.JUST_STARTED);
     }
 
-    /**
-     * Start a new game.
-     */
-    public void play() {
-        interfaceDrawer.draw();
+    public void move(String from, String to) throws GameException {
+        Cell cellFrom = board.getCellAt(from);
+        Cell cellTo = board.getCellAt(to);
+        // TODO check correctness before moving
+        System.out.println(String.format("Cell from = %s, cell to = %s", cellFrom, cellTo));
+        if (!cellFrom.isEmpty()) {
+            if (cellTo.isEmpty()) {
+                cellTo.setFigure(cellFrom.getFigure());
+                cellFrom.removeFigure();
+
+
+                System.out.println(String.format("After move: Cell from = %s, cell to = %s", cellFrom, cellTo));
+            } else {
+                // TODO exception
+            }
+        } else {
+            // TODO exception
+        }
+    }
+
+    public WinCheckResponse getStatus() {
+        return lastGameStatus;
+    }
+
+    public Board getBoard() {
+        return board;
     }
 
     private void initBlackFigures() {

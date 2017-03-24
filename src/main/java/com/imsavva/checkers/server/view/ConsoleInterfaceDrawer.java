@@ -9,13 +9,7 @@ import com.imsavva.checkers.server.beans.Figure;
  */
 public class ConsoleInterfaceDrawer implements InterfaceDrawer {
 
-    private Board board;
-
-    public ConsoleInterfaceDrawer(Board board) {
-        this.board = board;
-    }
-
-    public void draw() {
+    public void draw(Board board) {
         System.out.println("drawing a board");
 
         for (int y = 0; y < board.getHeight(); y++) {
@@ -34,6 +28,8 @@ public class ConsoleInterfaceDrawer implements InterfaceDrawer {
         for (int i = 0; i < board.getWidth(); i++) {
             System.out.print(" " + board.CHARACTERS[i] + " ");
         }
+
+        System.out.println();
     }
 
     private void drawCell(Cell cell) {
