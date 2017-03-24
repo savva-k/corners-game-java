@@ -32,7 +32,7 @@ public class ConsoleController implements Controller {
             interfaceDrawer.draw(game.getBoard());
 
             System.out.println("Write a move, e.g. B3 B4");
-            String[] command = scanner.nextLine().split(" ");
+            String[] command = scanner.nextLine().toUpperCase().split(" ");
             try {
                 game.move(command[0], command[1]);
             } catch (GameException e) {

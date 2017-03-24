@@ -15,6 +15,7 @@ public class Board {
     private static final int DEFAULT_WIDTH = 8;
     private static final int DEFAULT_HEIGHT = 8;
     private Map<Point, Cell> cells;
+    private Map<String, Cell> cellsByName;
     private int width;
     private int height;
 
@@ -26,6 +27,7 @@ public class Board {
         this.width = width;
         this.height = height;
         cells = new HashMap<Point, Cell>();
+        cellsByName = new HashMap<String, Cell>();
         createCells();
     }
 
@@ -64,24 +66,7 @@ public class Board {
      * @return Cell cell
      */
     public Cell getCellAt(String address) {
-        if (address.length() != 2) {
-            throw new IllegalArgumentException("Incorrect argument \"address\" length: " + address);
-        }
-
-        char xAxisChar = address.toUpperCase().charAt(0);
-
-        for (int x = 0; x < CHARACTERS.length; x++) {
-            if (xAxisChar == CHARACTERS[x]) {
-                try {
-                    int y = Integer.valueOf(address.substring(1));
-                    return getCellAt(x, y);
-                } catch (NumberFormatException e) {
-                    throw new IllegalArgumentException("Incorrect argument \"address\": " + address);
-                }
-            }
-        }
-
-        throw new IllegalArgumentException("Incorrect argument \"address\" value: " + address);
+        return cellsByName.get(address);
     }
 
     public int getWidth() {
@@ -101,12 +86,14 @@ public class Board {
     }
 
     private void createCells() {
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                String name = CHARACTERS[j] + String.valueOf(i + 1);
-                Cell cell = new Cell(name, j, i);
-                Point point = new Point (i, j);
+        for (int x = 0; x < getWidth(); x++) {
+            for (int y = 0; y < getHeight(); y++) {
+                String name = CHARACTERS[x] + String.valueOf(y + 1);
+                int inversedY = getWidth() - (y + 1);
+                Cell cell = new Cell(name, x, inversedY);
+                Point point = new Point (x, inversedY);
                 this.cells.put(point, cell);
+                this.cellsByName.put(name, cell);
             }
         }
     }

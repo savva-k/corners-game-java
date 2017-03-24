@@ -84,31 +84,31 @@ public class UgolkiGame implements GameModel {
         private static List<Point> blacksStartPoints = new ArrayList<Point>();
 
         static {
-            whitesStartPoints.add(new Point(0, 0));
-            whitesStartPoints.add(new Point(1, 0));
-            whitesStartPoints.add(new Point(2, 0));
-            whitesStartPoints.add(new Point(3, 0));
-            whitesStartPoints.add(new Point(0, 1));
-            whitesStartPoints.add(new Point(1, 1));
-            whitesStartPoints.add(new Point(2, 1));
-            whitesStartPoints.add(new Point(3, 1));
-            whitesStartPoints.add(new Point(0, 2));
-            whitesStartPoints.add(new Point(1, 2));
-            whitesStartPoints.add(new Point(2, 2));
-            whitesStartPoints.add(new Point(3, 2));
+            whitesStartPoints.add(new Point(0, 7));
+            whitesStartPoints.add(new Point(1, 7));
+            whitesStartPoints.add(new Point(2, 7));
+            whitesStartPoints.add(new Point(3, 7));
+            whitesStartPoints.add(new Point(0, 6));
+            whitesStartPoints.add(new Point(1, 6));
+            whitesStartPoints.add(new Point(2, 6));
+            whitesStartPoints.add(new Point(3, 6));
+            whitesStartPoints.add(new Point(0, 5));
+            whitesStartPoints.add(new Point(1, 5));
+            whitesStartPoints.add(new Point(2, 5));
+            whitesStartPoints.add(new Point(3, 5));
 
-            blacksStartPoints.add(new Point(4, 7));
-            blacksStartPoints.add(new Point(5, 7));
-            blacksStartPoints.add(new Point(6, 7));
-            blacksStartPoints.add(new Point(7, 7));
-            blacksStartPoints.add(new Point(4, 6));
-            blacksStartPoints.add(new Point(5, 6));
-            blacksStartPoints.add(new Point(6, 6));
-            blacksStartPoints.add(new Point(7, 6));
-            blacksStartPoints.add(new Point(4, 5));
-            blacksStartPoints.add(new Point(5, 5));
-            blacksStartPoints.add(new Point(6, 5));
-            blacksStartPoints.add(new Point(7, 5));
+            blacksStartPoints.add(new Point(4, 0));
+            blacksStartPoints.add(new Point(5, 0));
+            blacksStartPoints.add(new Point(6, 0));
+            blacksStartPoints.add(new Point(7, 0));
+            blacksStartPoints.add(new Point(4, 1));
+            blacksStartPoints.add(new Point(5, 1));
+            blacksStartPoints.add(new Point(6, 1));
+            blacksStartPoints.add(new Point(7, 1));
+            blacksStartPoints.add(new Point(4, 2));
+            blacksStartPoints.add(new Point(5, 2));
+            blacksStartPoints.add(new Point(6, 2));
+            blacksStartPoints.add(new Point(7, 2));
         }
 
         public static List<Point> getWhitesStartPoints() {
