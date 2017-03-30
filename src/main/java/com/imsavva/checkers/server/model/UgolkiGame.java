@@ -1,9 +1,8 @@
 package com.imsavva.checkers.server.model;
 
 import com.imsavva.checkers.server.beans.*;
-import com.imsavva.checkers.server.model.commands.Command;
 import com.imsavva.checkers.server.model.exceptions.GameException;
-import com.imsavva.checkers.server.view.InterfaceDrawer;
+import com.imsavva.checkers.server.model.exceptions.PathCheckingException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,13 +19,13 @@ public class UgolkiGame implements GameModel {
     private Player player1;
     private Player player2;
     private WinCheckResponse lastGameStatus;
-    private boolean gameFinished;
+    private PathChecker pathChecker;
 
-    public UgolkiGame(Board board, Player player1, Player player2) {
+    public UgolkiGame(Board board, Player player1, Player player2, PathChecker pathChecker) {
         this.board = board;
         this.player1 = player1;
         this.player2 = player2;
-        this.gameFinished = false;
+        this.pathChecker = pathChecker;
     }
 
     public void startGame() {
@@ -39,20 +38,13 @@ public class UgolkiGame implements GameModel {
     public void move(String from, String to) throws GameException {
         Cell cellFrom = board.getCellAt(from);
         Cell cellTo = board.getCellAt(to);
-        // TODO check correctness before moving
-        System.out.println(String.format("Cell from = %s, cell to = %s", cellFrom, cellTo));
-        if (!cellFrom.isEmpty()) {
-            if (cellTo.isEmpty()) {
-                cellTo.setFigure(cellFrom.getFigure());
-                cellFrom.removeFigure();
 
-
-                System.out.println(String.format("After move: Cell from = %s, cell to = %s", cellFrom, cellTo));
-            } else {
-                // TODO exception
-            }
-        } else {
-            // TODO exception
+        try {
+            pathChecker.checkMovePossibility(cellFrom, cellTo);
+            cellTo.setFigure(cellFrom.getFigure());
+            cellFrom.removeFigure();
+        } catch (PathCheckingException e) {
+            throw new GameException(e.getMessage());
         }
     }
 
@@ -77,7 +69,7 @@ public class UgolkiGame implements GameModel {
     }
 
     /**
-     * This class contains parameters for ugolki game.
+     * This class contains parameters for the ugolki game.
      */
     private static class CheckersParams {
         private static List<Point> whitesStartPoints = new ArrayList<Point>();
