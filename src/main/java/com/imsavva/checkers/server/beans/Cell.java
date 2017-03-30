@@ -63,6 +63,27 @@ public class Cell {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+
+        Cell cell = (Cell) o;
+
+        if (!point.equals(cell.point))
+            return false;
+        return name.equals(cell.name);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = point.hashCode();
+        result = 31 * result + name.hashCode();
+        return result;
+    }
+
+    @Override
     public String toString() {
         return String.format("Cell [%s, %s, %s]", name, point, figure);
     }

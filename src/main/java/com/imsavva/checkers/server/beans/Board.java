@@ -1,6 +1,8 @@
 package com.imsavva.checkers.server.beans;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -58,6 +60,17 @@ public class Board {
         return this.cells.get(new Point(x, y));
     }
 
+    public List<Cell> getNeighbourCells(Cell cell) {
+        List<Cell> cells = new ArrayList<Cell>();
+
+        addNeighbourCell(cells, cell, 1, 0);
+        addNeighbourCell(cells, cell, -1, 0);
+        addNeighbourCell(cells, cell, 0, 1);
+        addNeighbourCell(cells, cell, 0, -1);
+
+        return cells;
+    }
+
     /**
      * Get cell by a text address, like A1, H8.
      *
@@ -95,6 +108,14 @@ public class Board {
                 this.cells.put(point, cell);
                 this.cellsByName.put(name, cell);
             }
+        }
+    }
+
+    private void addNeighbourCell(List<Cell> cells, Cell cell, int offsetX, int offsetY) {
+        Cell neighbourCell = getCellAt(cell.getX() + offsetX, cell.getY() + offsetY);
+
+        if (neighbourCell != null) {
+            cells.add(neighbourCell);
         }
     }
 }
