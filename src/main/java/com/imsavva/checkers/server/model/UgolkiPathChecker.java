@@ -39,16 +39,16 @@ public class UgolkiPathChecker implements PathChecker {
     }
 
     private void quickCheck(Player player, Cell from, Cell to) throws PathCheckingException {
-        if (player.getColor() != from.getFigure().getColor()) {
-            throw new PathCheckingException("You cannot move your opponent's figures!");
-        }
-
         if (from.isEmpty()) {
             throw new PathCheckingException("Source cell is empty!");
         }
 
         if (!to.isEmpty()) {
             throw new PathCheckingException("Destination cell is already taken!");
+        }
+
+        if (player.getColor() != from.getFigure().getColor()) {
+            throw new PathCheckingException("You cannot move your opponent's figures!");
         }
     }
 
