@@ -29,7 +29,7 @@ public class ConsoleController implements Controller {
 
         while (gameStatus.getStatus() == WinCheckResponse.Status.JUST_STARTED ||
                 gameStatus.getStatus() == WinCheckResponse.Status.IN_PROGRESS) {
-            interfaceDrawer.draw(game.getBoard());
+            interfaceDrawer.draw(game);
 
             System.out.println("Write a move, e.g. B3 B4");
             String[] command = scanner.nextLine().toUpperCase().split(" ");

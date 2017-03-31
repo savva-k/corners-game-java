@@ -20,8 +20,8 @@ public class Runner {
         Board board = new Board();
         InterfaceDrawer drawer = new ConsoleInterfaceDrawer();
         PathChecker pathChecker = new UgolkiPathChecker(board);
-        Player player1 = new Player();
-        Player player2 = new Player();
+        Player player1 = new Player("Dummy Player");
+        Player player2 = new Player("Test Player");
 
         GameModel game = new UgolkiGame(board, player1, player2, pathChecker);
         Controller controller = new ConsoleController(drawer, game);

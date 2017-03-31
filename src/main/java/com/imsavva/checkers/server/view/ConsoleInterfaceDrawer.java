@@ -3,14 +3,16 @@ package com.imsavva.checkers.server.view;
 import com.imsavva.checkers.server.beans.Board;
 import com.imsavva.checkers.server.beans.Cell;
 import com.imsavva.checkers.server.beans.Figure;
+import com.imsavva.checkers.server.model.GameModel;
 
 /**
  * @author Savva Kodeikin
  */
 public class ConsoleInterfaceDrawer implements InterfaceDrawer {
 
-    public void draw(Board board) {
-        System.out.println("drawing a board");
+    public void draw(GameModel gameModel) {
+        Board board = gameModel.getBoard();
+        System.out.println(gameModel.getActivePlayer().getName() + ", it's your turn!");
 
         for (int y = 0; y < board.getHeight(); y++) {
             System.out.print(board.getHeight() - y);

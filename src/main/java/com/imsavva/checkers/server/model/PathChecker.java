@@ -1,6 +1,7 @@
 package com.imsavva.checkers.server.model;
 
 import com.imsavva.checkers.server.beans.Cell;
+import com.imsavva.checkers.server.beans.Player;
 import com.imsavva.checkers.server.model.exceptions.PathCheckingException;
 
 /**
@@ -14,5 +15,5 @@ public interface PathChecker {
      * @param to
      * @return
      */
-    void checkMovePossibility(Cell from, Cell to) throws PathCheckingException;
+    void checkMovePossibility(Player player, Cell from, Cell to) throws PathCheckingException;
 }

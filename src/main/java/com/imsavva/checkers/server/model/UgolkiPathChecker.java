@@ -2,6 +2,7 @@ package com.imsavva.checkers.server.model;
 
 import com.imsavva.checkers.server.beans.Board;
 import com.imsavva.checkers.server.beans.Cell;
+import com.imsavva.checkers.server.beans.Player;
 import com.imsavva.checkers.server.model.exceptions.PathCheckingException;
 
 import java.util.ArrayList;
@@ -18,8 +19,8 @@ public class UgolkiPathChecker implements PathChecker {
         this.board = board;
     }
 
-    public void checkMovePossibility(Cell from, Cell to) throws PathCheckingException {
-        quickCheck(from, to);
+    public void checkMovePossibility(Player player, Cell from, Cell to) throws PathCheckingException {
+        quickCheck(player, from, to);
 
         List<Cell> neighbourCells = board.getNeighbourCells(from);
         List<Cell> possibleMoves = new ArrayList<Cell>();
@@ -37,7 +38,11 @@ public class UgolkiPathChecker implements PathChecker {
         }
     }
 
-    private void quickCheck(Cell from, Cell to) throws PathCheckingException {
+    private void quickCheck(Player player, Cell from, Cell to) throws PathCheckingException {
+        if (player.getColor() != from.getFigure().getColor()) {
+            throw new PathCheckingException("You cannot move your opponent's figures!");
+        }
+
         if (from.isEmpty()) {
             throw new PathCheckingException("Source cell is empty!");
         }

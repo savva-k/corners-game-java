@@ -2,7 +2,6 @@ package com.imsavva.checkers.server.model;
 
 import com.imsavva.checkers.server.beans.Board;
 import com.imsavva.checkers.server.beans.Player;
-import com.imsavva.checkers.server.model.commands.Command;
 import com.imsavva.checkers.server.model.exceptions.GameException;
 
 /**
@@ -37,4 +36,11 @@ public interface GameModel {
       * @return board game board
      */
     Board getBoard();
+
+    /**
+     * Get a player that is currently active.
+     *
+     * @return Player current active player
+     */
+    Player getActivePlayer();
 }

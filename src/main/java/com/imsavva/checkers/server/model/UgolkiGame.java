@@ -6,6 +6,7 @@ import com.imsavva.checkers.server.model.exceptions.PathCheckingException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Ugolki is a two-players game, usually played on a 8x8 board.
@@ -18,6 +19,7 @@ public class UgolkiGame implements GameModel {
     private Board board;
     private Player player1;
     private Player player2;
+    private Player activePlayer;
     private WinCheckResponse lastGameStatus;
     private PathChecker pathChecker;
 
@@ -32,6 +34,8 @@ public class UgolkiGame implements GameModel {
         board.cleanCells();
         initWhiteFigures();
         initBlackFigures();
+        assignFigureColors();
+        activePlayer = player1;
         lastGameStatus = new WinCheckResponse(WinCheckResponse.Status.JUST_STARTED);
     }
 
@@ -40,9 +44,10 @@ public class UgolkiGame implements GameModel {
         Cell cellTo = board.getCellAt(to);
 
         try {
-            pathChecker.checkMovePossibility(cellFrom, cellTo);
+            pathChecker.checkMovePossibility(activePlayer, cellFrom, cellTo);
             cellTo.setFigure(cellFrom.getFigure());
             cellFrom.removeFigure();
+            changeActivePlayer();
         } catch (PathCheckingException e) {
             throw new GameException(e.getMessage());
         }
@@ -56,6 +61,10 @@ public class UgolkiGame implements GameModel {
         return board;
     }
 
+    public Player getActivePlayer() {
+        return activePlayer;
+    }
+
     private void initBlackFigures() {
         for (Point point : CheckersParams.getBlacksStartPoints()) {
             board.addFigure(new Figure(point, Figure.Color.BLACK), point);
@@ -66,6 +75,22 @@ public class UgolkiGame implements GameModel {
         for (Point point : CheckersParams.getWhitesStartPoints()) {
             board.addFigure(new Figure(point, Figure.Color.WHITE), point);
         }
+    }
+
+    private void assignFigureColors() {
+        Random random = new Random();
+
+        if (random.nextBoolean()) {
+            player1.setColor(Figure.Color.WHITE);
+            player2.setColor(Figure.Color.BLACK);
+        } else {
+            player1.setColor(Figure.Color.BLACK);
+            player2.setColor(Figure.Color.WHITE);
+        }
+    }
+
+    private void changeActivePlayer() {
+        activePlayer = activePlayer == player1 ? player2 : player1;
     }
 
     /**
