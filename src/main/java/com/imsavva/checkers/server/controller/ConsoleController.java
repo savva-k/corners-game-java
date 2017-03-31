@@ -42,5 +42,15 @@ public class ConsoleController implements Controller {
 
             gameStatus = game.getStatus();
         }
+
+        proclaimResults(gameStatus);
+    }
+
+    private void proclaimResults(WinCheckResponse gameStatus) {
+        if (gameStatus.getStatus() == WinCheckResponse.Status.FINISHED) {
+            interfaceDrawer.proclaimWinner(gameStatus.getWinner());
+        } else {
+            interfaceDrawer.proclaimDeadHeat();
+        }
     }
 }

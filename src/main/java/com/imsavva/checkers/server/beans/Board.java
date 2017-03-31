@@ -60,6 +60,18 @@ public class Board {
         return this.cells.get(new Point(x, y));
     }
 
+    public List<Point> getFiguresPoints(Figure.Color color) {
+        List<Point> points = new ArrayList<Point>();
+
+        for (Map.Entry<Point, Cell> e : cells.entrySet()) {
+            if (!e.getValue().isEmpty() && e.getValue().getFigure().getColor() == color) {
+                points.add(e.getKey());
+            }
+        }
+
+        return points;
+    }
+
     public List<Cell> getNeighbourCells(Cell cell) {
         List<Cell> cells = new ArrayList<Cell>();
 

@@ -4,10 +4,8 @@ import com.imsavva.checkers.server.beans.Board;
 import com.imsavva.checkers.server.beans.Player;
 import com.imsavva.checkers.server.controller.ConsoleController;
 import com.imsavva.checkers.server.controller.Controller;
-import com.imsavva.checkers.server.model.GameModel;
-import com.imsavva.checkers.server.model.PathChecker;
-import com.imsavva.checkers.server.model.UgolkiGame;
-import com.imsavva.checkers.server.model.UgolkiPathChecker;
+import com.imsavva.checkers.server.model.*;
+import com.imsavva.checkers.server.model.exceptions.GameException;
 import com.imsavva.checkers.server.view.ConsoleInterfaceDrawer;
 import com.imsavva.checkers.server.view.InterfaceDrawer;
 
@@ -22,8 +20,8 @@ public class Runner {
         PathChecker pathChecker = new UgolkiPathChecker(board);
         Player player1 = new Player("Dummy Player");
         Player player2 = new Player("Test Player");
-
-        GameModel game = new UgolkiGame(board, player1, player2, pathChecker);
+        WinCriteria ugolkiWinCriteria = new UgolkiWinCriteria();
+        GameModel game = new UgolkiGame(board, player1, player2, pathChecker, ugolkiWinCriteria);
         Controller controller = new ConsoleController(drawer, game);
         controller.startGame();
     }

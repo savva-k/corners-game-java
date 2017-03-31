@@ -22,12 +22,15 @@ public class UgolkiGame implements GameModel {
     private Player activePlayer;
     private WinCheckResponse lastGameStatus;
     private PathChecker pathChecker;
+    private WinCriteria winCriteria;
 
-    public UgolkiGame(Board board, Player player1, Player player2, PathChecker pathChecker) {
+    public UgolkiGame(Board board, Player player1, Player player2,
+                      PathChecker pathChecker, WinCriteria winCriteria) {
         this.board = board;
         this.player1 = player1;
         this.player2 = player2;
         this.pathChecker = pathChecker;
+        this.winCriteria = winCriteria;
     }
 
     public void startGame() {
@@ -35,7 +38,7 @@ public class UgolkiGame implements GameModel {
         initWhiteFigures();
         initBlackFigures();
         assignFigureColors();
-        activePlayer = player1;
+        activePlayer = getPlayerWithWhites();
         lastGameStatus = new WinCheckResponse(WinCheckResponse.Status.JUST_STARTED);
     }
 
@@ -47,6 +50,7 @@ public class UgolkiGame implements GameModel {
             pathChecker.checkMovePossibility(activePlayer, cellFrom, cellTo);
             cellTo.setFigure(cellFrom.getFigure());
             cellFrom.removeFigure();
+            lastGameStatus = winCriteria.checkForWinner(board, activePlayer);
             changeActivePlayer();
         } catch (PathCheckingException e) {
             throw new GameException(e.getMessage());
@@ -66,15 +70,19 @@ public class UgolkiGame implements GameModel {
     }
 
     private void initBlackFigures() {
-        for (Point point : CheckersParams.getBlacksStartPoints()) {
+        for (Point point : CheckersParams.getWhitesStartPoints()) {
             board.addFigure(new Figure(point, Figure.Color.BLACK), point);
         }
+        board.getCellAt(2, 4).setFigure(board.getCellAt(2, 5).getFigure());
+        board.getCellAt(2, 5).removeFigure();
     }
 
     private void initWhiteFigures() {
-        for (Point point : CheckersParams.getWhitesStartPoints()) {
+        for (Point point : CheckersParams.getBlacksStartPoints()) {
             board.addFigure(new Figure(point, Figure.Color.WHITE), point);
         }
+        board.getCellAt(4, 3).setFigure(board.getCellAt(4, 2).getFigure());
+        board.getCellAt(4, 2).removeFigure();
     }
 
     private void assignFigureColors() {
@@ -89,6 +97,10 @@ public class UgolkiGame implements GameModel {
         }
     }
 
+    private Player getPlayerWithWhites() {
+        return player1.getColor() == Figure.Color.WHITE ? player1 : player2;
+    }
+
     private void changeActivePlayer() {
         activePlayer = activePlayer == player1 ? player2 : player1;
     }
@@ -96,7 +108,7 @@ public class UgolkiGame implements GameModel {
     /**
      * This class contains parameters for the ugolki game.
      */
-    private static class CheckersParams {
+    public static class CheckersParams {
         private static List<Point> whitesStartPoints = new ArrayList<Point>();
         private static List<Point> blacksStartPoints = new ArrayList<Point>();
 
