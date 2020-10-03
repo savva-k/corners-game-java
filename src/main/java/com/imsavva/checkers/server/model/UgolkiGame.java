@@ -73,16 +73,12 @@ public class UgolkiGame implements GameModel {
         for (Point point : CheckersParams.getWhitesStartPoints()) {
             board.addFigure(new Figure(point, Figure.Color.BLACK), point);
         }
-        board.getCellAt(2, 4).setFigure(board.getCellAt(2, 5).getFigure());
-        board.getCellAt(2, 5).removeFigure();
     }
 
     private void initWhiteFigures() {
         for (Point point : CheckersParams.getBlacksStartPoints()) {
             board.addFigure(new Figure(point, Figure.Color.WHITE), point);
         }
-        board.getCellAt(4, 3).setFigure(board.getCellAt(4, 2).getFigure());
-        board.getCellAt(4, 2).removeFigure();
     }
 
     private void assignFigureColors() {
