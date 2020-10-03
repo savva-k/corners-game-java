@@ -18,6 +18,14 @@ public class BoardPanelTest {
     }
 
     @Test
+    public void getSquareNameTest() {
+        assertThat(panel.getSquareName(new Point(0, 0)), is("A8"));
+        assertThat(panel.getSquareName(new Point(7, 0)), is("H8"));
+        assertThat(panel.getSquareName(new Point(7, 7)), is("H1"));
+        assertThat(panel.getSquareName(new Point(0, 7)), is("A1"));
+    }
+
+    @Test
     public void squareToPositionText() {
         Point pos = panel.squareToPosition(new Point(0, 0));
         assertThat(pos.x, is(23));

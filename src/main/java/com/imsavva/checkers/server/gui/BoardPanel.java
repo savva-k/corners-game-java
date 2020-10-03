@@ -1,23 +1,11 @@
 package com.imsavva.checkers.server.gui;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.net.URL;
-import java.util.ArrayList;
-
-@Getter
-@AllArgsConstructor
-class Piece {
-    @Setter
-    private Point square;
-    private final Image image;
-}
 
 @Slf4j
 public class BoardPanel extends JPanel implements MouseListener, MouseMotionListener, ActionListener {
@@ -27,27 +15,21 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
     private static final int BOARD_SQUARE_LENGTH = 50;
     private static final int BOARD_SQUARE_PADDING = 1;
 
-    private Image boardImage;
-    private Point lastMousePos;
-    private Piece movingPiece;
-    private Point movingPiecePos;
+    private transient Image boardImage;
+    private transient Image whitePieceImage;
+    private transient Image blackPieceImage;
 
-    private java.util.List<Piece> pieceList;
+    private transient Point lastMousePos;
+    private transient BoardPanelPiece movingBoardPanelPiece;
+    private transient Point movingPiecePos;
 
-    public BoardPanel initComponents() {
+    private transient BoardPanelListener boardPanelListener;
+
+    public void initComponents() {
         // load images
         boardImage = getImage("board.jpg");
-        Image whitePiece = getImage("white.png");
-        Image blackPiece = getImage("black.png");
-
-        // Initial piece positions
-        pieceList = new ArrayList<>();
-        for (int x = 0; x < 4; ++x) {
-            for (int y = 0; y < 3; ++y) {
-                pieceList.add(new Piece(new Point(4 + x, y), blackPiece));
-                pieceList.add(new Piece(new Point(x, y + 5), whitePiece));
-            }
-        }
+        whitePieceImage = getImage("white.png");
+        blackPieceImage = getImage("black.png");
 
         // set panel size
         setPreferredSize(new Dimension(BOARD_WIDTH, BOARD_HEIGHT));
@@ -58,8 +40,6 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
 
         // image refresh timer
         new Timer(10, this).start();
-
-        return this;
     }
 
     @Override
@@ -70,17 +50,21 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
         g.drawImage(boardImage, 0, 0, this);
 
         // draw pieces
-        Point piecePos;
-        for (Piece piece : pieceList) {
-            if (movingPiece == null || movingPiece.getSquare() != piece.getSquare()) {
-                piecePos = squareToPosition(piece.getSquare());
-                g.drawImage(piece.getImage(), piecePos.x, piecePos.y, this);
+        for (int x = 0; x < 8; ++x) {
+            for (int y = 0; y < 8; ++y) {
+                if (movingBoardPanelPiece == null || !movingBoardPanelPiece.isAt(x, y)) {
+                    BoardPanelPiece piece = pieceAtSquare(new Point(x, y));
+                    if (piece != null) {
+                        Point piecePos = squareToPosition(piece.getSquare());
+                        g.drawImage(piece.getImage(), piecePos.x, piecePos.y, this);
+                    }
+                }
             }
         }
 
         // draw moving piece
-        if (movingPiece != null) {
-            g.drawImage(movingPiece.getImage(), movingPiecePos.x, movingPiecePos.y, this);
+        if (movingBoardPanelPiece != null) {
+            g.drawImage(movingBoardPanelPiece.getImage(), movingPiecePos.x, movingPiecePos.y, this);
         }
 
         // make sure we update the graphics
@@ -129,13 +113,17 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
      * @param square Square as Y = row, X = col.
      * @return The piece or null if empty.
      */
-    private Piece pieceAtSquare(Point square) {
-        for (Piece p : pieceList) {
-            if (p.getSquare().equals(square)) {
-                return p;
-            }
+    private BoardPanelPiece pieceAtSquare(Point square) {
+        BoardPanelPiece piece = boardPanelListener.getPieceAt(square.x, square.y);
+        if (piece.isEmpty()) {
+            return null;
         }
-        return null;
+        piece.setImage(piece.isWhite() ? whitePieceImage : blackPieceImage);
+        return piece;
+    }
+
+    String getSquareName(Point square) {
+        return String.format("%c%c", 'A' + square.x, '8' - square.y);
     }
 
     @Override
@@ -145,8 +133,9 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
         if (square != null) {
 
             // check to see if there's a piece at that square
-            movingPiece = pieceAtSquare(square);
-            if (movingPiece != null) {
+            movingBoardPanelPiece = pieceAtSquare(square);
+            if (movingBoardPanelPiece != null) {
+                log.debug("Picking up piece: {}", movingBoardPanelPiece);
 
                 // save the mouse position so we can move the piece relative to the drag
                 // and convert the square coordinates to actual component coordinates to
@@ -154,21 +143,33 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
                 lastMousePos = mouseEvent.getPoint();
                 movingPiecePos = squareToPosition(square);
             }
+
+        } else {
+            log.debug("Clicked outside the board.");
         }
     }
 
     @Override
     public void mouseReleased(MouseEvent mouseEvent) {
+        // Nothing moving just exit
+        if (movingBoardPanelPiece == null) {
+            return;
+        }
+
         // Check to see if we dropped the piece at an actual square,
         // and if we did, check to see that there's not another piece
         // already there.
-        Point square = positionToSquare(mouseEvent.getPoint());
-        if (square != null && pieceAtSquare(square) == null) {
-            movingPiece.setSquare(square);
+        Point targetSquare = positionToSquare(mouseEvent.getPoint());
+        if (boardPanelListener != null) {
+            log.debug("Dropping piece: {} to ({}, {})", movingBoardPanelPiece,
+                    targetSquare.x, targetSquare.y);
+            boardPanelListener.movingPiece(
+                    getSquareName(movingBoardPanelPiece.getSquare()),
+                    getSquareName(targetSquare));
         }
 
         // Set moving piece to null so we don't paint it anymore.
-        movingPiece = null;
+        movingBoardPanelPiece = null;
     }
 
     @Override
@@ -193,16 +194,24 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
     }
 
     @Override
-    public void mouseClicked(MouseEvent mouseEvent) {}
+    public void mouseClicked(MouseEvent mouseEvent) {
+        /* No need to handle clicks */
+    }
 
     @Override
-    public void mouseMoved(MouseEvent mouseEvent) {}
+    public void mouseMoved(MouseEvent mouseEvent) {
+        /* No need to handle moves */
+    }
 
     @Override
-    public void mouseEntered(MouseEvent mouseEvent) {}
+    public void mouseEntered(MouseEvent mouseEvent) {
+        /* No need to test for enter */
+    }
 
     @Override
-    public void mouseExited(MouseEvent mouseEvent) {}
+    public void mouseExited(MouseEvent mouseEvent) {
+        /* No need to test for exit */
+    }
 
     public static Image getImage(String filename) {
         URL url = BoardPanel.class.getResource("/" + filename);
@@ -210,5 +219,9 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
             throw new IllegalArgumentException("Image \"" + filename + "\" not found.");
         }
         return new ImageIcon(url).getImage();
+    }
+
+    public void addMoveListener(BoardPanelListener moveListener) {
+        this.boardPanelListener = moveListener;
     }
 }
