@@ -16,6 +16,7 @@ import java.awt.event.*;
 public class GraphicInterface extends JFrame implements ActionListener, BoardPanelListener {
     private transient GameModel game;
     private transient Board board;
+    private JLabel currentPlayerLabel;
 
     public GraphicInterface() {
         initGame();
@@ -58,6 +59,11 @@ public class GraphicInterface extends JFrame implements ActionListener, BoardPan
         boardPanel.addMoveListener(this);
         boardPanel.initComponents();
 
+        currentPlayerLabel = new JLabel();
+        refreshCurrentPlayer();
+
+        setLayout(new BoxLayout(getContentPane(), BoxLayout.PAGE_AXIS));
+        add(currentPlayerLabel);
         add(boardPanel);
 
         pack();
@@ -99,7 +105,14 @@ public class GraphicInterface extends JFrame implements ActionListener, BoardPan
         } else if (gameStatus.getStatus() == WinCheckResponse.Status.DEAD_HEAT) {
             JOptionPane.showMessageDialog(this, "Dead heat!",
                     "Game Over", JOptionPane.PLAIN_MESSAGE);
+        } else {
+            refreshCurrentPlayer();
         }
+    }
+
+    private void refreshCurrentPlayer() {
+        String currentPlayer = "Current player: " + game.getActivePlayer().getName();
+        currentPlayerLabel.setText(currentPlayer);
     }
 
     @Override

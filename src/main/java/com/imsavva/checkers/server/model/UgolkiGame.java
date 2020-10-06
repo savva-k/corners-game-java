@@ -31,14 +31,14 @@ public class UgolkiGame implements GameModel {
         this.player2 = player2;
         this.pathChecker = pathChecker;
         this.winCriteria = winCriteria;
+        initPlayers();
     }
 
     public void startGame() {
         board.cleanCells();
         initWhiteFigures();
         initBlackFigures();
-        assignFigureColors();
-        activePlayer = getPlayerWithWhites();
+        initPlayers();
         lastGameStatus = new WinCheckResponse(WinCheckResponse.Status.JUST_STARTED);
     }
 
@@ -67,6 +67,11 @@ public class UgolkiGame implements GameModel {
 
     public Player getActivePlayer() {
         return activePlayer;
+    }
+
+    private void initPlayers() {
+        assignFigureColors();
+        activePlayer = getPlayerWithWhites();
     }
 
     private void initBlackFigures() {
