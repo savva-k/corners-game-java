@@ -100,6 +100,11 @@ public class GraphicInterface extends JFrame implements ActionListener, BoardPan
         }
     }
 
+    @Override
+    public Player getCurrentPlayer() {
+        return game.getActivePlayer();
+    }
+
     private void checkGameStatus() {
         WinCheckResponse gameStatus = game.getStatus();
         if (gameStatus.getStatus() == WinCheckResponse.Status.FINISHED) {

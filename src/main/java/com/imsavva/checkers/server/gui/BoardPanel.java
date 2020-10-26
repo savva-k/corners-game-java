@@ -1,5 +1,6 @@
 package com.imsavva.checkers.server.gui;
 
+import com.imsavva.checkers.server.beans.Figure;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
@@ -48,6 +49,7 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
 
         // draw board
         g.drawImage(boardImage, 0, 0, this);
+        markCurrentPlayer(g);
 
         // draw pieces
         for (int x = 0; x < 8; ++x) {
@@ -120,6 +122,15 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
         }
         piece.setImage(piece.isWhite() ? whitePieceImage : blackPieceImage);
         return piece;
+    }
+
+    private void markCurrentPlayer(Graphics g) {
+        g.setColor(Color.GREEN);
+        if (boardPanelListener.getCurrentPlayer().getColor() == Figure.Color.WHITE) {
+            g.fillRect(225, 20, 205, 3);
+        } else {
+            g.fillRect(20, 428, 205, 3);
+        }
     }
 
     String getSquareName(Point square) {
