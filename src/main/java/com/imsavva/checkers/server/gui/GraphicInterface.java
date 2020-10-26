@@ -17,6 +17,7 @@ public class GraphicInterface extends JFrame implements ActionListener, BoardPan
     private transient GameModel game;
     private transient Board board;
     private JLabel currentPlayerLabel;
+    private JLabel statusLabel;
 
     public GraphicInterface() {
         initGame();
@@ -60,11 +61,14 @@ public class GraphicInterface extends JFrame implements ActionListener, BoardPan
         boardPanel.initComponents();
 
         currentPlayerLabel = new JLabel();
+        statusLabel = new JLabel();
+        resetStatusLabel();
         refreshCurrentPlayer();
 
         setLayout(new BoxLayout(getContentPane(), BoxLayout.PAGE_AXIS));
         add(currentPlayerLabel);
         add(boardPanel);
+        add(statusLabel);
 
         pack();
         setResizable(false);
@@ -85,12 +89,13 @@ public class GraphicInterface extends JFrame implements ActionListener, BoardPan
 
     public void movingPiece(String from, String to) {
         try {
+            resetStatusLabel();
             game.move(from, to);
             checkGameStatus();
 
         } catch (GameException e) {
-            JOptionPane.showMessageDialog(this, e.getMessage(),
-                    "Warning", JOptionPane.WARNING_MESSAGE);
+            statusLabel.setForeground(Color.RED);
+            statusLabel.setText(e.getMessage());
             log.error(e.getMessage());
         }
     }
@@ -113,6 +118,10 @@ public class GraphicInterface extends JFrame implements ActionListener, BoardPan
     private void refreshCurrentPlayer() {
         String currentPlayer = "Current player: " + game.getActivePlayer().getName();
         currentPlayerLabel.setText(currentPlayer);
+    }
+
+    private void resetStatusLabel() {
+        statusLabel.setText(" ");
     }
 
     @Override
