@@ -2,6 +2,8 @@
 
 <img src="./screenshots/corners.png" width="250">
 
+This repo is abandoned. New, nice, online, Typescript + NodeJs version is available here: https://github.com/savva-k/corners-game
+
 The game is played on a chess board with checkers pieces. Two players start a new game in diagonal corners, like this:
 
      - - - - x x x x
